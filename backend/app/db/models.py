@@ -7,6 +7,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import DateTime, ForeignKey, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID as PostgreSQLUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import DateTime, ForeignKey, String, Text, UniqueConstraint, func
 
 from app.db.database import Base
 
@@ -113,4 +114,56 @@ class Profile(Base):
 
     user: Mapped["User"] = relationship(
         back_populates="profile",
+    )
+
+class UserSkill(Base):
+    __tablename__ = "user_skills"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "skill_name",
+            name="uq_user_skill",
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(
+        PostgreSQLUUID(as_uuid=True),
+        primary_key=True,
+        default=uuid4,
+    )
+
+    user_id: Mapped[UUID] = mapped_column(
+        PostgreSQLUUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    skill_name: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+    )
+
+    category: Mapped[Optional[str]] = mapped_column(
+        String(50),
+        nullable=True,
+    )
+
+    self_assessed_level: Mapped[Optional[str]] = mapped_column(
+        String(30),
+        nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )

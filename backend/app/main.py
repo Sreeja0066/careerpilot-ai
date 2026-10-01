@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.api.auth import router as auth_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.profile import router as profile_router
+from app.api.skills import router as skills_router
 
 from app.db.dependencies import get_db
 
@@ -24,6 +25,7 @@ app.add_middleware(
 )
 app.include_router(profile_router, prefix="/api/v1")
 app.include_router(auth_router)
+app.include_router(skills_router, prefix="/api/v1")
 
 @app.get("/health")
 def health_check():
