@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 type Profile = {
   id: string;
   user_id: string;
@@ -25,7 +25,9 @@ type Skill = {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+
 export default function OnboardingPage() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     full_name: "",
     experience_level: "",
@@ -51,7 +53,7 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     const loadData = async () => {
-      const token = sessionStorage.getItem("careerpilot_access_token");
+      const token = localStorage.getItem("careerpilot_access_token");
 
       if (!token) {
         setError("You are not logged in.");
@@ -101,6 +103,13 @@ export default function OnboardingPage() {
           });
 
           setProfileExists(true);
+          setMessage("Profile saved successfully.");
+
+          setTimeout(() => {
+            navigate("/dashboard", {
+              replace: true,
+            });
+          }, 500);
         }
 
         // --------------------------------
@@ -173,7 +182,7 @@ export default function OnboardingPage() {
     setMessage("");
     setError("");
 
-    const token = sessionStorage.getItem(
+    const token = localStorage.getItem(
       "careerpilot_access_token",
     );
 
@@ -249,7 +258,7 @@ export default function OnboardingPage() {
       return;
     }
 
-    const token = sessionStorage.getItem(
+    const token = localStorage.getItem(
       "careerpilot_access_token",
     );
 

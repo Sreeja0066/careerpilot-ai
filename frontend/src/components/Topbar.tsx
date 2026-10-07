@@ -6,8 +6,14 @@ import {
   Sun,
   UserRound,
 } from "lucide-react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  useNavigate,
+} from "react-router-dom";
 
 import { useTheme } from "../context/ThemeContext";
 
@@ -19,9 +25,85 @@ export default function Topbar({
   onMenuClick,
 }: TopbarProps) {
   const navigate = useNavigate();
-  const { resolvedTheme, setTheme } = useTheme();
 
-  const [menuOpen, setMenuOpen] = useState(false);
+  const {
+    resolvedTheme,
+    setTheme,
+  } = useTheme();
+
+  const [menuOpen, setMenuOpen] =
+    useState(false);
+
+  const userMenuRef =
+    useRef<HTMLDivElement | null>(null);
+
+  // --------------------------------------------------
+  // Close account menu when clicking outside
+  // --------------------------------------------------
+
+  useEffect(() => {
+    const handleOutsideClick = (
+      event: MouseEvent,
+    ) => {
+      if (!menuOpen) {
+        return;
+      }
+
+      const target =
+        event.target as Node;
+
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(
+          target,
+        )
+      ) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener(
+      "mousedown",
+      handleOutsideClick,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleOutsideClick,
+      );
+    };
+  }, [menuOpen]);
+
+  // --------------------------------------------------
+  // Close account menu on Escape
+  // --------------------------------------------------
+
+  useEffect(() => {
+    const handleEscape = (
+      event: KeyboardEvent,
+    ) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener(
+      "keydown",
+      handleEscape,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "keydown",
+        handleEscape,
+      );
+    };
+  }, []);
+
+  // --------------------------------------------------
+  // Theme
+  // --------------------------------------------------
 
   const toggleTheme = () => {
     setTheme(
@@ -31,20 +113,26 @@ export default function Topbar({
     );
   };
 
+  // --------------------------------------------------
+  // Account actions
+  // --------------------------------------------------
+
   const handleProfile = () => {
     setMenuOpen(false);
+
     navigate("/profile");
   };
 
   const handleSettings = () => {
     setMenuOpen(false);
+
     navigate("/settings");
   };
 
   const handleLogout = () => {
     setMenuOpen(false);
 
-    sessionStorage.removeItem(
+    localStorage.removeItem(
       "careerpilot_access_token",
     );
 
@@ -55,7 +143,6 @@ export default function Topbar({
 
   return (
     <header className="app-topbar">
-
       {/* Mobile navigation */}
       <button
         type="button"
@@ -73,7 +160,6 @@ export default function Topbar({
       <div className="topbar-spacer" />
 
       <div className="topbar-actions">
-
         {/* Theme toggle */}
         <button
           type="button"
@@ -103,8 +189,11 @@ export default function Topbar({
           )}
         </button>
 
-        {/* Account */}
-        <div className="user-menu-wrapper">
+        {/* Account menu */}
+        <div
+          className="user-menu-wrapper"
+          ref={userMenuRef}
+        >
           <button
             type="button"
             className="user-menu-trigger"
@@ -114,6 +203,7 @@ export default function Topbar({
               )
             }
             aria-expanded={menuOpen}
+            aria-haspopup="menu"
             aria-label="Open account menu"
             title="Account"
           >

@@ -58,7 +58,7 @@ export default function Sidebar({
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("careerpilot_access_token");
+    localStorage.removeItem("careerpilot_access_token");
     navigate("/login", { replace: true });
   };
 

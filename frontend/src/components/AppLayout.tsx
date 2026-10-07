@@ -11,6 +11,10 @@ export default function AppLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false);
 
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <div
       className={[
@@ -22,6 +26,7 @@ export default function AppLayout() {
         .filter(Boolean)
         .join(" ")}
     >
+      {/* Desktop sidebar */}
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() =>
@@ -29,23 +34,37 @@ export default function AppLayout() {
             (current) => !current,
           )
         }
-        mobileOpen={mobileMenuOpen}
-        onMobileClose={() =>
-          setMobileMenuOpen(false)
-        }
+        onMobileClose={closeMobileMenu}
       />
 
+      {/* Mobile backdrop */}
       {mobileMenuOpen && (
         <button
           type="button"
           className="mobile-sidebar-backdrop"
           aria-label="Close navigation"
-          onClick={() =>
-            setMobileMenuOpen(false)
-          }
+          onClick={closeMobileMenu}
         />
       )}
 
+      {/* Mobile drawer */}
+      <div
+        className={[
+          "mobile-sidebar",
+          mobileMenuOpen ? "open" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        <Sidebar
+          collapsed={false}
+          onToggle={closeMobileMenu}
+          mobileOpen={mobileMenuOpen}
+          onMobileClose={closeMobileMenu}
+        />
+      </div>
+
+      {/* Main application */}
       <div className="app-shell-main">
         <Topbar
           onMenuClick={() =>

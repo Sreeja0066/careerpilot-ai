@@ -6,42 +6,31 @@ import {
   type ReactNode,
 } from "react";
 
-export type ThemePreference = "light" | "dark" | "system";
-export type ResolvedTheme = "light" | "dark";
+type Theme = "light" | "dark";
 
-type ThemeContextValue = {
-  theme: ThemePreference;
-  resolvedTheme: ResolvedTheme;
-  setTheme: (theme: ThemePreference) => void;
+type ThemeContextType = {
+  theme: Theme;
+  toggleTheme: () => void;
+  setTheme: (theme: Theme) => void;
 };
 
-const ThemeContext = createContext<ThemeContextValue | undefined>(
-  undefined,
+const ThemeContext = createContext<ThemeContextType | undefined>(
+  undefined
 );
 
-const STORAGE_KEY = "careerpilot_theme";
+const THEME_KEY = "careerpilot_theme";
 
-function getSystemTheme(): ResolvedTheme {
+function getInitialTheme(): Theme {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+
+  if (savedTheme === "dark" || savedTheme === "light") {
+    return savedTheme;
+  }
+
   return window.matchMedia("(prefers-color-scheme: dark)")
     .matches
     ? "dark"
     : "light";
-}
-
-function getInitialTheme(): ThemePreference {
-  const storedTheme = localStorage.getItem(
-    STORAGE_KEY,
-  ) as ThemePreference | null;
-
-  if (
-    storedTheme === "light" ||
-    storedTheme === "dark" ||
-    storedTheme === "system"
-  ) {
-    return storedTheme;
-  }
-
-  return "system";
 }
 
 export function ThemeProvider({
@@ -49,72 +38,34 @@ export function ThemeProvider({
 }: {
   children: ReactNode;
 }) {
-  const [theme, setThemeState] =
-    useState<ThemePreference>(getInitialTheme);
-
-  const [resolvedTheme, setResolvedTheme] =
-    useState<ResolvedTheme>(() => {
-      const initialTheme = getInitialTheme();
-
-      return initialTheme === "system"
-        ? getSystemTheme()
-        : initialTheme;
-    });
+  const [theme, setThemeState] = useState<Theme>(
+    getInitialTheme
+  );
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, theme);
+    const html = document.documentElement;
 
-    const updateTheme = () => {
-      const nextTheme =
-        theme === "system"
-          ? getSystemTheme()
-          : theme;
+    html.classList.remove("light", "dark");
+    html.classList.add(theme);
 
-      setResolvedTheme(nextTheme);
-
-      document.documentElement.dataset.theme =
-        nextTheme;
-
-      document.documentElement.style.colorScheme =
-        nextTheme;
-    };
-
-    updateTheme();
-
-    if (theme !== "system") {
-      return;
-    }
-
-    const mediaQuery = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    );
-
-    const handleChange = () => {
-      updateTheme();
-    };
-
-    mediaQuery.addEventListener(
-      "change",
-      handleChange,
-    );
-
-    return () => {
-      mediaQuery.removeEventListener(
-        "change",
-        handleChange,
-      );
-    };
+    localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
 
-  const setTheme = (nextTheme: ThemePreference) => {
-    setThemeState(nextTheme);
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+  };
+
+  const toggleTheme = () => {
+    setThemeState((currentTheme) =>
+      currentTheme === "light" ? "dark" : "light"
+    );
   };
 
   return (
     <ThemeContext.Provider
       value={{
         theme,
-        resolvedTheme,
+        toggleTheme,
         setTheme,
       }}
     >
@@ -128,7 +79,7 @@ export function useTheme() {
 
   if (!context) {
     throw new Error(
-      "useTheme must be used inside ThemeProvider",
+      "useTheme must be used inside ThemeProvider"
     );
   }
 
