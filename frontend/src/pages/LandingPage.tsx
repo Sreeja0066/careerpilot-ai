@@ -1,6 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 function LandingPage() {
+  const navigate = useNavigate();
+
+  const goToSignup = () => {
+    navigate("/signup");
+  };
+
   return (
     <div className="app">
       <header className="navbar">
@@ -9,14 +16,23 @@ function LandingPage() {
         <nav className="nav-links">
           <a href="#features">Features</a>
           <a href="#how-it-works">How it works</a>
-          <button className="nav-button">Get Started</button>
+
+          <button
+            type="button"
+            className="nav-button"
+            onClick={goToSignup}
+          >
+            Get Started
+          </button>
         </nav>
       </header>
 
       <main>
         <section className="hero">
           <div className="hero-content">
-            <span className="eyebrow">ADAPTIVE AI CAREER PREPARATION</span>
+            <span className="eyebrow">
+              ADAPTIVE AI CAREER PREPARATION
+            </span>
 
             <h1>
               Prepare smarter.
@@ -31,8 +47,18 @@ function LandingPage() {
             </p>
 
             <div className="hero-actions">
-              <button className="primary-button">Start your journey</button>
-              <a href="#how-it-works" className="secondary-button">
+              <button
+                type="button"
+                className="primary-button"
+                onClick={goToSignup}
+              >
+                Start your journey
+              </button>
+
+              <a
+                href="#how-it-works"
+                className="secondary-button"
+              >
                 See how it works
               </a>
             </div>
@@ -78,17 +104,30 @@ function LandingPage() {
             </div>
 
             <div className="next-step">
-              <span className="next-step-label">Next recommended activity</span>
+              <span className="next-step-label">
+                Next recommended activity
+              </span>
+
               <strong>Practice SQL JOINs</strong>
-              <span className="next-step-meta">20 min · Intermediate</span>
+
+              <span className="next-step-meta">
+                20 min · Intermediate
+              </span>
             </div>
           </div>
         </section>
 
-        <section className="section" id="features">
+        <section
+          className="section"
+          id="features"
+        >
           <div className="section-heading">
-            <span className="eyebrow">WHY CAREERPILOT</span>
+            <span className="eyebrow">
+              WHY CAREERPILOT
+            </span>
+
             <h2>More than an AI chatbot.</h2>
+
             <p>
               CareerPilot remembers your preparation journey and uses your
               learning evidence to decide what you should work on next.
@@ -97,8 +136,12 @@ function LandingPage() {
 
           <div className="feature-grid">
             <article className="feature-card">
-              <div className="feature-number">01</div>
+              <div className="feature-number">
+                01
+              </div>
+
               <h3>Understand your gaps</h3>
+
               <p>
                 Assess your current skills against your target role and
                 identify the areas that need attention.
@@ -106,8 +149,12 @@ function LandingPage() {
             </article>
 
             <article className="feature-card">
-              <div className="feature-number">02</div>
+              <div className="feature-number">
+                02
+              </div>
+
               <h3>Learn with a plan</h3>
+
               <p>
                 Turn skill gaps into a personalized sequence of topics,
                 practice tasks, quizzes, and study sessions.
@@ -115,8 +162,12 @@ function LandingPage() {
             </article>
 
             <article className="feature-card">
-              <div className="feature-number">03</div>
+              <div className="feature-number">
+                03
+              </div>
+
               <h3>Adapt as you improve</h3>
+
               <p>
                 Your performance becomes evidence that updates your skill
                 state and changes what you should practice next.
@@ -125,70 +176,110 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="section workflow-section" id="how-it-works">
+        <section
+          className="section workflow-section"
+          id="how-it-works"
+        >
           <div className="section-heading">
-            <span className="eyebrow">THE LEARNING LOOP</span>
-            <h2>Your preparation evolves with you.</h2>
+            <span className="eyebrow">
+              THE LEARNING LOOP
+            </span>
+
+            <h2>
+              Your preparation evolves with you.
+            </h2>
           </div>
 
           <div className="workflow">
             <div className="workflow-step">
               <span>01</span>
               <strong>Assess</strong>
-              <p>Understand your current skill level.</p>
+              <p>
+                Understand your current skill level.
+              </p>
             </div>
 
-            <div className="workflow-arrow">→</div>
+            <div className="workflow-arrow">
+              →
+            </div>
 
             <div className="workflow-step">
               <span>02</span>
               <strong>Plan</strong>
-              <p>Build a personalized preparation path.</p>
+              <p>
+                Build a personalized preparation path.
+              </p>
             </div>
 
-            <div className="workflow-arrow">→</div>
+            <div className="workflow-arrow">
+              →
+            </div>
 
             <div className="workflow-step">
               <span>03</span>
               <strong>Learn</strong>
-              <p>Study with level-aware AI tutoring.</p>
+              <p>
+                Study with level-aware AI tutoring.
+              </p>
             </div>
 
-            <div className="workflow-arrow">→</div>
+            <div className="workflow-arrow">
+              →
+            </div>
 
             <div className="workflow-step">
               <span>04</span>
               <strong>Practice</strong>
-              <p>Test what you actually know.</p>
+              <p>
+                Test what you actually know.
+              </p>
             </div>
 
-            <div className="workflow-arrow">→</div>
+            <div className="workflow-arrow">
+              →
+            </div>
 
             <div className="workflow-step">
               <span>05</span>
               <strong>Adapt</strong>
-              <p>Use performance to decide what comes next.</p>
+              <p>
+                Use performance to decide what comes next.
+              </p>
             </div>
           </div>
         </section>
 
         <section className="cta-section">
           <div>
-            <span className="eyebrow">CAREERPILOT AI</span>
-            <h2>Build skills with a system that remembers.</h2>
+            <span className="eyebrow">
+              CAREERPILOT AI
+            </span>
+
+            <h2>
+              Build skills with a system that remembers.
+            </h2>
+
             <p>
               From your first assessment to interview preparation, every step
               contributes to your evolving candidate profile.
             </p>
           </div>
 
-          <button className="primary-button">Start preparing</button>
+          <button
+            type="button"
+            className="primary-button"
+            onClick={goToSignup}
+          >
+            Start preparing
+          </button>
         </section>
       </main>
 
       <footer className="footer">
         <span>CareerPilot AI</span>
-        <span>Adaptive AI Career & Interview Preparation</span>
+        <span>
+          Adaptive AI Career & Interview Preparation
+        </span>
       </footer>
     </div>
   );
